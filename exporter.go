@@ -875,8 +875,9 @@ var errNotFound = errors.New("key not found")
 
 // getKeyInfo takes a key and returns the type, and the size or length of the value stored at that key.
 func getKeyInfo(c redis.Conn, key string) (info keyInfo, err error) {
-
+	log.Debugf("getKeyInfo() - querying key %s", key)
 	if info.keyType, err = redis.String(c.Do("TYPE", key)); err != nil {
+		log.Debugf("getKeyInfo() - err: %s", err)
 		return info, err
 	}
 
@@ -914,6 +915,7 @@ func getKeyInfo(c redis.Conn, key string) (info keyInfo, err error) {
 		err = fmt.Errorf("Unknown type: %v for key: %v", info.keyType, key)
 	}
 
+	log.Debugf("getKeyInfo() exit - info: %s err: %s", info, err)
 	return info, err
 }
 
