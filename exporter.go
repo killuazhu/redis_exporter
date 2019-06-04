@@ -727,6 +727,8 @@ func (e *Exporter) extractCheckKeyMetrics(ch chan<- prometheus.Metric, c redis.C
 		}
 		dbLabel := "db" + k.db
 		e.registerConstMetricGauge(ch, "key_size", info.size, dbLabel, k.key)
+		metricNmae := strings.ReplaceAll(k.key, ".", "_")
+		e.registerConstMetricGauge(ch, metricNmae, info.size)
 
 		// Only record value metric if value is float-y
 		if val, err := redis.Float64(c.Do("GET", k.key)); err == nil {
